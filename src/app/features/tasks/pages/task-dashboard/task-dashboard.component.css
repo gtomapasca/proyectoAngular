@@ -1,0 +1,13 @@
+.center-align {
+    text-align: center;
+    vertical-align: top;
+  }
+
+.fixed-width { width: 200px; }
+
+p-badge {
+    font-size: 0.9vw; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

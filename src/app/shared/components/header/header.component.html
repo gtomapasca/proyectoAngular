@@ -1,0 +1,24 @@
+<p-toolbar 
+  styleClass="bg-gray-900 shadow-2" 
+  [style]="{ 'border-radius': '3rem', 'background-image': 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }">
+  <ng-template pTemplate="start">
+    <button 
+      pButton 
+      icon="pi pi-bars" 
+      class="p-button-rounded p-button-text text-white" 
+      (click)="sidebarToggle.emit()">
+    </button>
+  </ng-template>
+  <ng-template pTemplate="center">
+    <label class="text-xl text-white font-bold">Gestor de Tareas</label>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-2">
+      <p-avatar 
+          [image]="avatarUrl" shape="circle"/>
+      <span class="font-bold text-bluegray-50">
+        {{ userName || 'Invitado' }}
+      </span>
+    </div>
+  </ng-template>
+</p-toolbar>

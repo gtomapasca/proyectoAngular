@@ -1,0 +1,137 @@
+<!-- Toolbar con botón para agregar nueva tarea -->
+<p-toolbar>
+  <div class="p-toolbar-group-start">
+    <label class="text-2xl">Listado de Tareas</label>
+  </div>
+  <div class="p-toolbar-group-end">
+    <p-dropdown 
+      [options]="categoryOptions" 
+      [(ngModel)]="selectedCategory" 
+      placeholder="Seleccionar categoría"
+      [filter]="true"
+      (onChange)="filterByCategory()"
+      class="mr-2"
+      >
+    </p-dropdown>
+    
+    <p-button 
+      icon="pi pi-refresh" 
+      label="Mostrar todas" 
+      class="mr-2" 
+      (click)="clearFilter()">
+    </p-button>
+
+    <p-button icon="pi pi-plus" label="Nueva Tarea" class="mr-2" (click)="openNewTask()"></p-button>
+   
+
+  </div>
+</p-toolbar>
+
+<!-- Tabla de tareas -->
+<p-table 
+  [value]="filteredTasks" 
+  [paginator]="true" 
+  [rows]="10" 
+  [responsive]="true" 
+  class="p-table"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder">
+
+  <ng-template pTemplate="header">
+    <tr>
+    
+      <th [ngClass]="'center-align'" pSortableColumn="id" style="width:5%">
+        ID <p-sortIcon field="id" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="titulo" style="width:13%">
+        Título <p-sortIcon field="titulo" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="descripcion" style="width:30%">
+        Descripción <p-sortIcon field="descripcion" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="prioridad" style="width:8%">
+        Prioridad <p-sortIcon field="prioridad" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="estado" style="width:8%">
+        Estado <p-sortIcon field="estado" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="categoria" style="width:8%">
+        Categoría <p-sortIcon field="categoria" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="creacion" style="width:9%">
+        Creación <p-sortIcon field="creacion" />
+      </th>
+      <th [ngClass]="'center-align'" pSortableColumn="vencimiento" style="width:9%">
+        Vencimiento <p-sortIcon field="vencimiento" />
+      </th>
+     <!-- <th [ngClass]="'center-align'" pSortableColumn="Progreso" style="width:8%">
+        Progreso <p-sortIcon field="Progreso" />
+      </th> -->
+      <th [ngClass]="'center-align'"  style="width:10%">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-task let-i="rowIndex">
+    <tr>
+      <td>{{ i + 1 }}</td>
+      <td>{{ task.titulo }}</td>
+   
+      <td>
+        <span *ngIf="!task.isExpanded">
+          {{ task.descripcion | truncate:100 }}
+        </span>
+        <span *ngIf="task.isExpanded">
+          {{ task.descripcion }}
+        </span> 
+        <span 
+          *ngIf="task.descripcion.length > 100" 
+          class="text-link p-ml-2" 
+          style="color: blue; cursor: pointer; text-decoration: underline;"
+          (click)="task.isExpanded = !task.isExpanded">
+          {{ task.isExpanded ? 'Ver menos' : 'Ver más' }}
+        </span>
+      </td>
+      
+      <td [ngClass]="'center-align'">
+        <p-badge [value]="task.prioridad" [styleClass]="getPriorityClass(task.prioridad)" styleClass="p-mr-2"></p-badge>
+      </td>
+      <td [ngClass]="'center-align'">
+        <p-badge [value]="task.estado" [styleClass]="getStatusClass(task.estado)" styleClass="p-mr-2"></p-badge>
+      </td>
+      <td [ngClass]="'center-align'">
+        <p-badge [value]="task.categoria" styleClass="p-mr-2"></p-badge>
+      </td>
+      <td [ngClass]="'center-align'">{{ task.creacion | timestampToDate  }}</td>
+      <td [ngClass]="'center-align'">{{ task.vencimiento  | timestampToDate}}</td>
+    <!--  <td [ngClass]="'center-align'">
+        <p-progressBar [value]="task.progreso" [showValue]="true" styleClass="p-mb-2"></p-progressBar>
+      </td>-->
+      <td [ngClass]="'center-align'">
+        <button 
+          pButton 
+          type="button" 
+          icon="pi pi-pencil" 
+          class="p-button-info" 
+          (click)="onEditTask(task)">
+        </button>
+        <button 
+          pButton 
+          type="button" 
+          icon="pi pi-trash" 
+          class="p-button-danger" 
+          (click)="onDeleteTask(task)">
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-task-form 
+  [task]="selectedTask" 
+  [(display)]="displayDialog" 
+  (save)="saveTask($event)" 
+  (cancel)="hideDialog()">
+</app-task-form>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

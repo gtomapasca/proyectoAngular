@@ -1,0 +1,7 @@
+<app-header (sidebarToggle)="toggleSidebar()" (logoutEvent)="logout()"></app-header>
+
+<app-sidebar [(visible)]="sidebarVisible" (visibleChange)="closeSidebar()"></app-sidebar>
+
+<div class="layout-container">
+  <router-outlet></router-outlet>
+</div>
